@@ -5,6 +5,8 @@ from .forms import FishermanSignUpForm, RetailerSignUpForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 
 
 # Create your views here.
@@ -42,6 +44,23 @@ class RetailerSignUpView(CreateView):
         user = form.save()
         login(self.request, user)
         return redirect('main:retailerhome')
+
+class RetailerInventoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Retailer_Inventory
+    login_url = '/login/'
+    fields = ["qty"]
+    template_name = 'main/update.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'inventory'
+    success_url = '/retailerhome'
+    def form_valid(self, form):
+        form.instance.Retailer = self.request.user.retailer
+        return super().form_valid(form)
+
+    def test_func(self):
+        car = self.get_object()
+        if self.request.user.retailer == car.Retailer:
+            return True
+        return False
 
 
 def logout_request(request):
