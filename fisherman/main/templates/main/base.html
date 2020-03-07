@@ -1,4 +1,4 @@
   <h2>Sign up for a free account</h2>
   <p class="lead">Select below the type of account you want to create</p>
-  <a href="/" class="black btn btn-student btn-lg" role="button">I'm a fisherman</a>
-  <a href="/" class="black btn btn-teacher btn-lg" role="button">I'm a retailer</a>
+  <a href="{% url 'main:fisherman_signup' %}" class="black btn btn-student btn-lg" role="button">I'm a fisherman</a>
+  <a href="{% url 'main:retailer_signup' %}" class="black btn btn-teacher btn-lg" role="button">I'm a retailer</a>

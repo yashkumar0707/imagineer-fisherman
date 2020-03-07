@@ -34,14 +34,12 @@ class FishermanSignUpForm(UserCreationForm):
 class RetailerSignUpForm(UserCreationForm):
     First_Name = forms.CharField(max_length=100, required=True)
     Last_Name = forms.CharField(max_length=100, required=True)
-    Age = forms.IntegerField(required=True)
-    Gender = forms.CharField(required = True)
     Address = forms.CharField(max_length=100, required=True)
     Mobile_No = forms.CharField(max_length = 10,required = True)
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("First_Name","Last_Name", "Address", "Mobile_No","Gender", "Age", "username", "password1", "password2")
+        fields = ("First_Name","Last_Name", "Address", "Mobile_No", "username", "password1", "password2")
 
     @transaction.atomic
     def save(self, commit = True):
