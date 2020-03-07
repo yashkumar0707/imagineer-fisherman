@@ -4,6 +4,7 @@ from .models import Fisherman, Retailer, User
 from .forms import FishermanSignUpForm, RetailerSignUpForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
 
 
 # Create your views here.
@@ -43,10 +44,10 @@ class RetailerSignUpView(CreateView):
         return redirect('main:signup')
 
 
-"""def logout_request(request):
+def logout_request(request):
     logout(request)
     messages.info(request,"Logged Out Successfully")
-    return redirect("main:homepage")"""
+    return redirect("main:signup")
 
 
 def login_request(request):

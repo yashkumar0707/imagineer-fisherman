@@ -26,6 +26,7 @@ urlpatterns = [
          name='fisherman_signup'),
     path('register/retailer/', RetailerSignUpView.as_view(), name='retailer_signup'),
     path('login/', views.login_request, name='login'),
+    path('logout/', views.logout_request, name='logout'),
     path('fisherhome', views.fisherhome, name='fisherhome'),
     path('retailerhome', views.retailerhome, name='retailerhome')
 ]
