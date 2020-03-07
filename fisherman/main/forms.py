@@ -12,7 +12,7 @@ class FishermanSignUpForm(UserCreationForm):
     First_Name = forms.CharField(max_length=100, required=True)
     Last_Name = forms.CharField(max_length=100, required=True)
     Region = forms.CharField(max_length=100, required=True)
-    Mobile_No = forms.CharField(max_length=10, required=True)
+    Mobile_No = forms.CharField(min_length=10, max_length=10, required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User

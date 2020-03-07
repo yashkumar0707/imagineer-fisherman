@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, TemplateView, DetailView, UpdateView, DeleteView
-from .models import Fisherman, Retailer, User
+from .models import Fisherman, Retailer, User, Retailer_Inventory
 from .forms import FishermanSignUpForm, RetailerSignUpForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
@@ -83,17 +83,24 @@ def login_request(request):
 
 def fisherhome(request):
     if request.user.is_authenticated and request.user.is_fisherman:
-        return render(request, 'main/fisherman_home.html')
+        return redirect('main:fisherhome')
     elif request.user.is_authenticated and request.user.is_retailer:
-        return redirect('retailerhome')
+        return redirect('main:retailerhome')
     else:
-        return redirect('login')
+        return redirect('main:login')
 
 
 def retailerhome(request):
     if request.user.is_authenticated and request.user.is_retailer:
-        return render(request, 'main/retailer_home.html')
+        return redirect('main:retailerhome')
     elif request.user.is_authenticated and request.user.is_fisherman:
-        return redirect('fisherhome')
+        return redirect('main:fisherhome')
     else:
-        return redirect('home')
+        return redirect('main:login')
+
+
+class retailerinventory(ListView):
+    model = Retailer_Inventory
+    template_name = "main/retailer_home.html"
+    context_object_name = 'inventory'
+    ordering = ['-qty']
