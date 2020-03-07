@@ -26,7 +26,7 @@ class FishermanSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('main:signup')
+        return redirect('main:fisherhome')
 
 
 class RetailerSignUpView(CreateView):
@@ -41,7 +41,7 @@ class RetailerSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('main:signup')
+        return redirect('main:retailerhome')
 
 
 def logout_request(request):
@@ -105,3 +105,5 @@ class retailerinventory(ListView):
     template_name = "main/retailer_home.html"
     context_object_name = 'inventory'
     ordering = ['-qty']
+
+

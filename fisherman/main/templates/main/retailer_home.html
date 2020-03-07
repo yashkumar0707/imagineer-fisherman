@@ -3,12 +3,6 @@
 {% block content %}
 
 <h1>
-<<<<<<< HEAD
-    retailer
-</h1>
-
-{% endblock %}
-=======
     Retailer
 </h1>
 
@@ -24,20 +18,21 @@
             <th>Fish name</th>
             <th>Fish quantity</th>
         </tr>
-        {%for i in inventory %}
+        {% for i in inventory %}
         {% if i.Retailer == user.retailer %}
         <tr>
             <td>
-                i.Fish.name
+                {{ i.Fish.name }}
             </td>
             <td>
-                i.qty
+                {{ i.qty }}
             </td>
         </tr>
-        {%endif%}
-        {%endfor%}
+        {% endif %}
+        {% endfor %}
     </table>
 </body>
 
 </html>
->>>>>>> 39ea57d8f2433c9868659e8e3b88206f23002322
+{% endblock %}
+
