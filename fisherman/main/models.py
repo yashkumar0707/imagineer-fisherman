@@ -21,6 +21,9 @@ class Fisherman(models.Model):
     def __str__(self):
         return self.user.username
 
+    class Meta:
+    	verbose_name_plural = "Fishermen"
+
 
 class Retailer(models.Model):
     user = models.OneToOneField(
@@ -38,9 +41,22 @@ class Retailer(models.Model):
 class Fish(models.Model):
     name = models.CharField(max_length=500, null=True)
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+    	verbose_name_plural = "Fish"
+
 
 class Retailer_Inventory(models.Model):
     Retailer = models.ForeignKey(Retailer, on_delete=models.CASCADE)
     Fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
     qty = models.IntegerField()
-# Create your models here.
+
+    def __str__(self):
+        return self.Retailer.user.username
+
+    class Meta:
+    	verbose_name_plural = "Retailer Inventories"
+  
+

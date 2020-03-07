@@ -27,6 +27,9 @@
             <td>
                 {{ i.qty }}
             </td>
+            <td>
+            <a class="black btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'main:update' i.id %}">Update</a>
+            </td>
         </tr>
         {% endif %}
         {% endfor %}
