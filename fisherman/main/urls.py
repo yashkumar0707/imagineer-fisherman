@@ -21,9 +21,11 @@ from . import views
 app_name = "main"
 
 urlpatterns = [
-	path('',SignUpView.as_view(),name = "signup" ),
-    path('register/fisherman/', FishermanSignUpView.as_view(), name='fisherman_signup'),
+    path('', SignUpView.as_view(), name="signup"),
+    path('register/fisherman/', FishermanSignUpView.as_view(),
+         name='fisherman_signup'),
     path('register/retailer/', RetailerSignUpView.as_view(), name='retailer_signup'),
-
     path('login/', views.login_request, name='login'),
+    path('fisherhome', views.fisherhome, name='fisherhome'),
+    path('retailerhome', views.retailerhome, name='retailerhome')
 ]

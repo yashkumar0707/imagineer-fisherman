@@ -3,10 +3,7 @@ from django.views.generic import ListView, CreateView, TemplateView, DetailView,
 from .models import Fisherman, Retailer, User
 from .forms import FishermanSignUpForm, RetailerSignUpForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login,logout,authenticate
-
-
-
+from django.contrib.auth import login, logout, authenticate
 
 
 # Create your views here.
@@ -14,6 +11,7 @@ from django.contrib.auth import login,logout,authenticate
 
 class SignUpView(TemplateView):
     template_name = 'main/base.html'
+
 
 class FishermanSignUpView(CreateView):
     model = User
@@ -29,6 +27,7 @@ class FishermanSignUpView(CreateView):
         login(self.request, user)
         return redirect('main:signup')
 
+
 class RetailerSignUpView(CreateView):
     model = User
     form_class = RetailerSignUpForm
@@ -43,10 +42,12 @@ class RetailerSignUpView(CreateView):
         login(self.request, user)
         return redirect('main:signup')
 
+
 """def logout_request(request):
     logout(request)
     messages.info(request,"Logged Out Successfully")
     return redirect("main:homepage")"""
+
 
 def login_request(request):
     if request.method == "POST":
@@ -54,11 +55,21 @@ def login_request(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(username = username,password =password)
+            user = authenticate(username=username, password=password)
             if user is not None:
-                login(request,user)
-                #messages.info(request, f'Logged in as : {username}')
-                return redirect("main:signup")
+                login(request, user)
+                print('qwer')
+                """if user.is_fisherman:
+                    type_obj = Fisherman.objects.get(user=user)
+                else:
+                    type_obj = Retailer.objects.get()"""
+                if user.is_authenticated and user.is_fisherman:
+                    print('uiui')
+                    return redirect('main:fisherhome')  # Go to student home
+                if user.is_authenticated and user.is_retailer:
+                    print('yash')
+                    return redirect('main:retailerhome')  # Go to teacher home
+
             else:
                 messages.error(request, "Invalid Username or Password")
         else:
@@ -67,4 +78,22 @@ def login_request(request):
     form = AuthenticationForm()
     return render(request,
                   "main/login.html",
-                  {"form":form})
+                  {"form": form})
+
+
+def fisherhome(request):
+    if request.user.is_authenticated and request.user.is_fisherman:
+        return render(request, 'main/fisherman_home.html')
+    elif request.user.is_authenticated and request.user.is_retailer:
+        return redirect('retailerhome')
+    else:
+        return redirect('login')
+
+
+def retailerhome(request):
+    if request.user.is_authenticated and request.user.is_retailer:
+        return render(request, 'main/retailer_home.html')
+    elif request.user.is_authenticated and request.user.is_fisherman:
+        return redirect('fisherhome')
+    else:
+        return redirect('home')
