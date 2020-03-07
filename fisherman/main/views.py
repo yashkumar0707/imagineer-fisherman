@@ -46,7 +46,7 @@ class RetailerSignUpView(CreateView):
 
 def logout_request(request):
     logout(request)
-    messages.info(request,"Logged Out Successfully")
+    messages.info(request, "Logged Out Successfully")
     return redirect("main:signup")
 
 
@@ -105,5 +105,3 @@ class retailerinventory(ListView):
     template_name = "main/retailer_home.html"
     context_object_name = 'inventory'
     ordering = ['-qty']
-
-
