@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, TemplateView, DetailView, UpdateView, DeleteView
-from .models import Fisherman, Retailer, User, Retailer_Inventory
+from .models import Fisherman, Retailer, User, Retailer_Inventory, Sales
 from .forms import FishermanSignUpForm, RetailerSignUpForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
-
+import os.path
+import openpyxl
+import pandas as pd
+from fbprophet import Prophet
+from django_pandas.io import read_frame
 
 # Create your views here.
 
@@ -45,6 +48,7 @@ class RetailerSignUpView(CreateView):
         login(self.request, user)
         return redirect('main:retailerhome')
 
+
 class RetailerInventoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Retailer_Inventory
     login_url = '/login/'
@@ -52,6 +56,7 @@ class RetailerInventoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, Updat
     template_name = 'main/update.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'inventory'
     success_url = '/retailerhome'
+
     def form_valid(self, form):
         form.instance.Retailer = self.request.user.retailer
         return super().form_valid(form)
@@ -103,7 +108,14 @@ def login_request(request):
 
 def fisherhome(request):
     if request.user.is_authenticated and request.user.is_fisherman:
-        return redirect('main:fisherhome')
+        qs = Sales.objects.all()
+        df = read_frame(qs, fieldnames=['ds', 'y'])
+        m = Prophet()
+        m.fit(df)
+        future = m.make_future_dataframe(periods=10)
+        forecast = m.predict(future)
+        print(forecast[['ds', 'yhat']].iloc[:10])
+        return render(request, "main/fisherman_home.html")
     elif request.user.is_authenticated and request.user.is_retailer:
         return redirect('main:retailerhome')
     else:

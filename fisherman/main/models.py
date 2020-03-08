@@ -22,7 +22,7 @@ class Fisherman(models.Model):
         return self.user.username
 
     class Meta:
-    	verbose_name_plural = "Fishermen"
+        verbose_name_plural = "Fishermen"
 
 
 class Retailer(models.Model):
@@ -45,7 +45,7 @@ class Fish(models.Model):
         return self.name
 
     class Meta:
-    	verbose_name_plural = "Fish"
+        verbose_name_plural = "Fish"
 
 
 class Retailer_Inventory(models.Model):
@@ -57,6 +57,10 @@ class Retailer_Inventory(models.Model):
         return self.Retailer.user.username
 
     class Meta:
-    	verbose_name_plural = "Retailer Inventories"
-  
+        verbose_name_plural = "Retailer Inventories"
 
+
+class Sales(models.Model):
+    ds = models.DateField()
+    Fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
+    y = models.IntegerField()
