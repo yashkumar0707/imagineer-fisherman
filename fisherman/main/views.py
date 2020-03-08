@@ -114,8 +114,9 @@ def fisherhome(request):
         m.fit(df)
         future = m.make_future_dataframe(periods=10)
         forecast = m.predict(future)
-        print(forecast[['ds', 'yhat']].iloc[:10])
-        return render(request, "main/fisherman_home.html")
+        print(forecast[['ds', 'yhat']].iloc[:1])
+        ans = forecast[['ds', 'yhat']].iloc[:1]
+        return render(request, "main/fisherman_home.html", {'ans': ans})
     elif request.user.is_authenticated and request.user.is_retailer:
         return redirect('main:retailerhome')
     else:
