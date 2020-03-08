@@ -1,27 +1,93 @@
-{% extends "main/header.html" %}
+<!-- {% extends "main/header.html" %}
 
-{% block content %}
+{% block content %} -->
 
+{% load static %}
 
 <html>
 
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/registration.css' %}">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </head>
 
 <body>
-    <table>
-        <tr>
-            <th>Fish name</th>
-            <th>Fish quantity</th>
-        </tr>
-        <tr>
-            <td>
-                {{ans}}
-            </td>
-        </tr>
-    </table>
-</body>
+
+    <body>
+        <ul class="ul1">
+            {% if user.is_authenticated %}
+            {% if user.is_fisherman %}
+            <li class="nav"><a class="active" href="/fisherhome/add">Add Fish</a></li>
+            {% endif %}
+
+            {% if user.is_superuser %}
+            <li class="nav"><a class="active" href="/inventory">Inventory</a></li>
+            {% endif %}
+
+            <li class="nav"><a class="active" href="#">{{user.username}}</a></li>
+            <li class="nav"><a class="active" href="/logout">Logout</a></li>
+            {% else %}
+            <li class="nav"><a class="active" href="/">Register</a></li>
+            <li class="nav"><a class="active" href="/login">Login</a></li>
+            {% endif %}
+        </ul>
+
+        <div style="background-color:#1b4793;height:200px; display:inline-block; width:100%;">
+            <h1 style="text-align: center; font-size: 70px; color:white;" id="top">
+                Fisherman Homepage
+            </h1>
+            <!-- <h2 style="text-align: center; color:white; padding-bottom:10px; margin-bottom:20px" id="top">
+                        Retailer
+                    </h2> -->
+        </div>
+        <br>
+        <br>
+        <h2 style="text-align:center;">Priority Table</h2>
+        <table align="center" style="width:70%; margin-top:auto">
+            <tr>
+                <th>Fish name</th>
+                <th>Fish quantity</th>
+            </tr>
+            {% for i in l %}
+            <tr>
+
+                <td>
+                    {{i.1}}
+                </td>
+                <td>
+                    {{i.0}}
+                </td>
+
+            </tr>
+            {%endfor%}
+        </table>
+    </body>
 
 </html>
 {% endblock %}
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>

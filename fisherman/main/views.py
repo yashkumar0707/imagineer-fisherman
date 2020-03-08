@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, TemplateView, DetailView, UpdateView, DeleteView
-from .models import Fisherman, Retailer, User, Retailer_Inventory, Sales
+from .models import Fisherman, Retailer, User, Retailer_Inventory, Sales, Fish, Fisherman_Inventory
 from .forms import FishermanSignUpForm, RetailerSignUpForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
@@ -11,6 +11,7 @@ import openpyxl
 import pandas as pd
 from fbprophet import Prophet
 from django_pandas.io import read_frame
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -47,6 +48,32 @@ class RetailerSignUpView(CreateView):
         user = form.save()
         login(self.request, user)
         return redirect('main:retailerhome')
+
+
+class FishermanInventoryCreateView(LoginRequiredMixin, CreateView):
+    model = Fisherman_Inventory
+    login_url = '/login/'
+    template_name = 'main/submit_fish.html'
+    context_object_name = 'inventory'
+    success_url = '/fisherhome'
+    fields = ["Fish", "qty"]
+
+    def form_valid(self, form):
+        form.instance.Fisherman = self.request.user.fisherman
+        return super().form_valid(form)
+
+
+def inventory(request):
+    sums = []
+    fishs = []
+    for fish in Fish.objects.all():
+        temp = Fisherman_Inventory.objects.filter(Fish=fish)
+        sum = 0
+        for i in temp:
+            sum = sum + i.qty
+        sums.append([sum, fish.name])
+        print(sums)
+    return render(request, "inventory.html", context={"sums": sums})
 
 
 class RetailerInventoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -108,15 +135,31 @@ def login_request(request):
 
 def fisherhome(request):
     if request.user.is_authenticated and request.user.is_fisherman:
-        qs = Sales.objects.all()
-        df = read_frame(qs, fieldnames=['ds', 'y'])
-        m = Prophet()
-        m.fit(df)
-        future = m.make_future_dataframe(periods=10)
-        forecast = m.predict(future)
-        print(forecast[['ds', 'yhat']].iloc[:1])
-        ans = forecast[['ds', 'yhat']].iloc[:1]
-        return render(request, "main/fisherman_home.html", {'ans': ans})
+        qty = []
+        fishn = []
+        l = []
+        i = 0
+        for fish in Fish.objects.all():
+            qs = Sales.objects.filter(Fish=fish)
+            df = read_frame(qs, fieldnames=['ds', 'y'])
+            m = Prophet()
+            m.fit(df)
+            future = m.make_future_dataframe(periods=10)
+            forecast = m.predict(future)
+            print(forecast[['ds', 'yhat']].iloc[:1])
+            print('njb')
+            a1 = forecast[['yhat']].iloc[0]['yhat']
+            print(a1)
+            qty.append(int(a1))
+            a2 = int(a1)
+            fishn.append(fish.name)
+            l.append([a2, fish.name])
+        # ans1 = ans['yhat']
+        # print(ans['yhat'])
+        for i in range(len(qty)):
+            print(qty[i])
+
+        return render(request, "main/fisherman_home.html", {'fishn': fishn, 'qty': qty, 'l': l})
     elif request.user.is_authenticated and request.user.is_retailer:
         return redirect('main:retailerhome')
     else:

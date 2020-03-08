@@ -64,3 +64,15 @@ class Sales(models.Model):
     ds = models.DateField()
     Fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
     y = models.IntegerField()
+
+
+class Fisherman_Inventory(models.Model):
+    Fisherman = models.ForeignKey(Fisherman, on_delete=models.CASCADE)
+    Fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
+    qty = models.IntegerField()
+
+    def __str__(self):
+        return self.Fisherman.user.username
+
+    class Meta:
+        verbose_name_plural = "Fisherman Inventories"
