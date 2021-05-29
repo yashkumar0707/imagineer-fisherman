@@ -1,0 +1,35 @@
+{% extends "main/header.html" %}
+
+{% block content %}
+<style>
+    form {
+        margin-left: 15%;
+        margin-right: 15%;
+        width: 70%;
+    }
+</style>
+
+<div style="background-color:#1b4793;height:200px; display:inline-block; width:100%;">
+    <h1 style="text-align: center; font-size: 70px; color:white;" id="top">
+        Add Fish
+    </h1>
+    <h2 style="text-align: center; color:white;" id="top">
+        Imagineer
+    </h2>
+
+</div>
+<br>
+<br>
+<div>
+    {% load crispy_forms_tags %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <button class="black btn waves-effect waves-light" type="submit" name="action">Submit
+        </button>
+        <br>
+    </form>
+
+</div>
+{% endblock %}

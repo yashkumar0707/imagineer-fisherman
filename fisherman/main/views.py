@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, TemplateView, DetailView, UpdateView, DeleteView
-from .models import Fisherman, Retailer, User, Retailer_Inventory, Sales, Fish, Fisherman_Inventory
+from .models import (Fisherman, Retailer, User, Retailer_Inventory, Sales, Fish, Fisherman_Inventory,
+                     Retailer_Request)
+
 from .forms import FishermanSignUpForm, RetailerSignUpForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
@@ -60,6 +62,19 @@ class FishermanInventoryCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.Fisherman = self.request.user.fisherman
+        return super().form_valid(form)
+
+
+class RetailerRequestCreateView(LoginRequiredMixin, CreateView):
+    model = Retailer_Request
+    login_url = '/login/'
+    template_name = 'main/request.html'
+    context_object_name = 'request'
+    success_url = '/fisherhome'
+    fields = ["Fish", "qty"]
+
+    def form_valid(self, form):
+        form.instance.Retailer = self.request.user.retailer
         return super().form_valid(form)
 
 

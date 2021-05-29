@@ -23,6 +23,10 @@
 		<li class="nav"><a class="active" href="/inventory">Inventory</a></li>
 		{% endif %}
 
+		{% if user.is_retailer %}
+		<li class="nav"><a class="active" href="/retailerhome/request">Request</a></li>
+		{% endif %}
+
 		<li class="nav"><a class="active" href="#">{{user.username}}</a></li>
 		<li class="nav"><a class="active" href="/logout">Logout</a></li>
 		{% else %}

@@ -1,3 +1,4 @@
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import RegexValidator
@@ -76,3 +77,12 @@ class Fisherman_Inventory(models.Model):
 
     class Meta:
         verbose_name_plural = "Fisherman Inventories"
+
+
+class Retailer_Request(models.Model):
+    Retailer = models.ForeignKey(Retailer, on_delete=models.CASCADE)
+    Fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
+    qty = models.IntegerField()
+
+    def __str__(self):
+        return self.Retailer.user.username

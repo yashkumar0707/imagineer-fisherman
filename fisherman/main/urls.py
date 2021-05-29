@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import SignUpView, RetailerSignUpView, FishermanSignUpView, retailerinventory, RetailerInventoryUpdateView, FishermanInventoryCreateView
+from .views import (SignUpView, RetailerSignUpView, FishermanSignUpView, retailerinventory, RetailerInventoryUpdateView, FishermanInventoryCreateView,
+                    RetailerRequestCreateView)
 from . import views
 
 app_name = "main"
@@ -33,6 +34,8 @@ urlpatterns = [
          RetailerInventoryUpdateView.as_view(), name='update'),
     path('fisherhome/add/',
          FishermanInventoryCreateView.as_view(), name='create-fish'),
+    path('retailerhome/request/',
+         RetailerRequestCreateView.as_view(), name='request'),
 
     #path('fisherhome', views.fisherhome, name='fisherhome'),
     #path('retailerhome', views.retailerhome, name='retailerhome')
